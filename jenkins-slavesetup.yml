@@ -1,0 +1,39 @@
+---
+- hosts: jenkins-slave
+  become: true
+  tasks:
+  - name: Update the Ubuntu Repo
+     apt:
+     update_cache: true
+     cache_valid_time: 3600
+  - name: Install java
+    apt:
+      name: openjdk-11-jre
+      state: present
+  - name: Download maven package
+    get-url:
+      url: https://dlcdn.apache.org/maven/maven-3/3.8.8/binaries/apache-maven-3.8.8-bin.tar.gz
+      dest: /opt
+  - name: Extract Maven package
+    unarchive:
+      src: /opt/apache-maven-3.8.8-bin.tar.gz
+      dest: /opt
+      remote_src: yes
+  - name: download java17
+    get_url: https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz
+    dest: /opt
+  - name: Extract java package
+    unarchive:
+      src: /opt/openjdk-17.0.2_linux-x64_bin.tar.gz
+      dest: /opt
+      remote_src: yes
+  - name: move to jdk-17
+    command : mv /opt/jdk-17.0.2/ /opt/jdk-17/
+  - name: create /home/reddyreddy3856/jenkins root directory
+    ansible.builtin.file:
+      path: /home/reddyreddy3856/jenkins
+      state: directory
+      mode: '0755'
+      owner: reddyreddy3856
+      group: reddyreddy3856
+   

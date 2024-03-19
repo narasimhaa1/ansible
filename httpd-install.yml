@@ -1,0 +1,19 @@
+---
+- name: installing apache httpd and enable the service
+  hosts: all
+  become: true
+  tasks:
+   - name: install httpd package
+     yum:
+       name: httpd
+       update_cache: yes 
+       state: present
+  - name: make sure service can activate
+     service:
+       name: httpd
+       state: started
+       enabled: yes
+  - name : copy fire from controller to node
+      copy:
+       src: /home/ansible/one.txt
+       dest: /temp

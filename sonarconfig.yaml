@@ -1,0 +1,34 @@
+---
+- name: Install and Configure SonarQube
+  hosts: your_ubuntu_host
+  become: yes
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install OpenJDK (Java 11)
+      apt:
+        name: openjdk-11-jdk
+        state: present
+
+    - name: Add SonarQube APT key
+      apt_key:
+        url: https://binaries.sonarsource.com/SonarSource/suc.deb.asc
+        state: present
+
+    - name: Add SonarQube APT repository
+      apt_repository:
+        repo: deb https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-9.0.1.46107/deb/ focal main
+        state: present
+
+    - name: Install SonarQube
+      apt:
+        name: sonarqube
+        state: present
+
+    - name: Start SonarQube service
+      service:
+        name: sonarqube
+        state: started

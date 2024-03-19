@@ -1,0 +1,24 @@
+
+---
+- name : Install and configure sonar 
+  host : sonar
+  become : true
+  tasks :
+    - name : Installing java 17 on Ubuntu
+      apt : 
+        name: Openjdk-17-jdk
+        state: present
+        update_cache: yes
+        cache_valid_time: 3600
+    - name: Install Unzip 
+      apt: 
+        name: unzip
+        state: present
+
+ 
+    - name: Download SonarQube
+      get_url:
+         url: "https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-8.9.2.46101.zip"
+         dest: "/home/reddyreddy3856/sonarqube.zip"
+
+      
